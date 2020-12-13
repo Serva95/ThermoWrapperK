@@ -9,6 +9,8 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import java.io.File
 import java.time.LocalDateTime
+import java.time.LocalTime
+import java.time.temporal.TemporalAmount
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
 
@@ -112,7 +114,14 @@ class Runner {
 
     fun scheduledRunner() {
         val scheduler = Executors.newSingleThreadScheduledExecutor()
-        scheduler.scheduleAtFixedRate(VersionManagerRunner(), 30, 45, TimeUnit.SECONDS)
+        val delay:LocalTime
+        val now = LocalTime.now()
+        delay = if (now.isBefore(LocalTime.of(1, 0)))
+            LocalTime.of(1, 0).minusSeconds(now.toSecondOfDay().toLong())
+        else
+            LocalTime.MAX.minusSeconds(now.toSecondOfDay().toLong()).plusSeconds(3600)
+        scheduler.scheduleAtFixedRate(VersionManagerRunner(), delay.toSecondOfDay().toLong(), TimeUnit.DAYS.toSeconds(1), TimeUnit.SECONDS)
+        //scheduler.scheduleAtFixedRate(VersionManagerRunner(), 30, 45, TimeUnit.SECONDS)
     }
 
 }
