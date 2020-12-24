@@ -9,7 +9,7 @@ plugins {
 }
 
 group = "it.srv"
-version = "0.0.1-SNAPSHOT"
+version = "1.0.0"
 java.sourceCompatibility = JavaVersion.VERSION_11
 
 configurations {
@@ -22,10 +22,10 @@ repositories {
 	mavenCentral()
 }
 
-var ktorVersion = "1.4.3"
+var ktorVersion = "latest.release"
 
 dependencies {
-	compileOnly("org.json:json:20201115")
+	compileOnly("org.json:json:latest.release")
 	implementation("io.ktor:ktor-client:$ktorVersion")
 	implementation("io.ktor:ktor-client-cio:$ktorVersion")
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
