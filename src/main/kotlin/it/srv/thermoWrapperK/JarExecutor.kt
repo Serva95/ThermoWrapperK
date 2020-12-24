@@ -58,20 +58,17 @@ class JarExecutor {
             while (this.error!!.readLine().also { line = it } != null) {
                 error.append("\n").append(line)
             }
-        } catch (ignored: IOException) {
-        }
+        } catch (ignored: IOException) { }
         var output = ""
         try {
             while (op!!.readLine().also { line = it } != null) {
                 output = "$output\n$line"
             }
-        } catch (ignored: IOException) {
-        }
+        } catch (ignored: IOException) { }
         try {
             this.error!!.close()
             op!!.close()
-        } catch (ignored: IOException) {
-        }
+        } catch (ignored: IOException) { }
         return "exitVal: $exitVal, error: $error, output: $output"
     }
 }

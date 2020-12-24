@@ -17,8 +17,8 @@ import java.time.LocalDateTime
 class VersionManager {
     private val client = HttpClient(CIO)
 
-    suspend fun searchNewVersion(): HashMap<String, Info> {
-        val new = HashMap<String, Info>()
+    suspend fun searchNewVersion(): HashMap<String, Info?> {
+        val new = HashMap<String, Info?>()
         try {
             val content: String = client.request("http://serva.altervista.org/prove/thermo.php")
             val json = JSONObject(content)
@@ -57,7 +57,7 @@ class VersionManager {
         }
     }
 
-    fun checkVersions(newVersion: HashMap<String, Info>, actualVersion: HashMap<String, Info>, infoDAO: InfoDAO, startup: Boolean): Boolean {
+    fun checkVersions(newVersion: HashMap<String, Info?>, actualVersion: HashMap<String, Info?>, infoDAO: InfoDAO, startup: Boolean): Boolean {
         var newVersionInstalled = false
         if (!newVersion["webversion"]?.value.equals(actualVersion["webversion"]?.value, true)
                 || !newVersion["toolsversion"]?.value.equals(actualVersion["toolsversion"]?.value, true)) {

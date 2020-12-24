@@ -12,8 +12,8 @@ class InfoDAO {
     @Autowired
     val repo: InfoRepository? = null
 
-    fun findLastTemporal(): HashMap<String, Info> {
-        val last = HashMap<String, Info>()
+    fun findLastTemporal(): HashMap<String, Info?> {
+        val last = HashMap<String, Info?>()
         last["lastsearch"] = repo!!.findById("lastsearch").orElse(null)
         last["webversion"] = repo!!.findById("webversion").orElse(null)
         last["toolsversion"] = repo!!.findById("toolsversion").orElse(null)
@@ -21,7 +21,7 @@ class InfoDAO {
         return last
     }
 
-    fun saveHash(hash: HashMap<String, Info>) {
+    fun saveHash(hash: HashMap<String, Info?>) {
         val toSave = ArrayList<Info>()
         hash["lastsearch"]?.let { toSave.add(it) }
         hash["webversion"]?.let { toSave.add(it) }
