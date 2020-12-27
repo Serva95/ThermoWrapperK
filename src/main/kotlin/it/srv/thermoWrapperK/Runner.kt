@@ -27,11 +27,11 @@ class Runner {
     @Bean
     fun executer() {
         val info = infoDAO.findLastTemporal()
-        val search = runBlocking { versionManager.searchNewVersion()}
+        val search = runBlocking { versionManager.searchNewVersion() }
         if (info["lastupdate"] == null) {
             with(versionManager) {
-                download(search["weburl"]?.value, "ThermoSmartSpring${search["webversion"]?.value}.jar")
-                download(search["toolsurl"]?.value, "ThermoTools${search["toolsversion"]?.value}.jar")
+                download(search["weburl"]!!.value!!, "ThermoSmartSpring${search["webversion"]?.value}.jar")
+                download(search["toolsurl"]!!.value!!, "ThermoTools${search["toolsversion"]?.value}.jar")
             }
             search["lastupdate"] = Info("lastupdate", "lastupdate", LocalDateTime.now())
             infoDAO.saveHash(search)

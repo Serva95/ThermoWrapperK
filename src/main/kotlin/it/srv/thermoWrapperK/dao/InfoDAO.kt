@@ -28,6 +28,8 @@ class InfoDAO {
         hash["toolsversion"]?.let { toSave.add(it) }
         hash["weburl"]?.let { toSave.add(it) }
         hash["toolsurl"]?.let { toSave.add(it) }
+        if (hash["lastupdate"] != null)
+            hash["lastupdate"]?.let { toSave.add(it) }
         if (hash["webextra"] != null)
             hash["webextra"]?.let { toSave.add(it) }
         if (hash["toolsextra"] != null)
@@ -35,8 +37,8 @@ class InfoDAO {
         repo!!.saveAll(toSave)
     }
 
-    operator fun get(id: String): Info {
-        return repo!!.findById(id).orElse(null)
-    }
+    operator fun get(id: String): Info { return repo!!.findById(id).orElse(null) }
+
+    fun save(info: Info) { repo!!.save(info) }
 
 }

@@ -43,7 +43,7 @@ class VersionManager {
         return new
     }
 
-    fun download(url: String?, fileName: String) {
+    fun download(url: String, fileName: String) {
         try {
             val website = URL(url)
             val rbc = Channels.newChannel(website.openStream())
@@ -53,7 +53,7 @@ class VersionManager {
             fos.close()
         } catch (e: Exception) {
             e.printStackTrace()
-            throw RuntimeException()
+            throw RuntimeException(e.printStackTrace().toString())
         }
     }
 
@@ -62,18 +62,28 @@ class VersionManager {
         if (!newVersion["webversion"]?.value.equals(actualVersion["webversion"]?.value, true)
                 || !newVersion["toolsversion"]?.value.equals(actualVersion["toolsversion"]?.value, true)) {
             if (!newVersion["webversion"]?.value.equals(actualVersion["webversion"]?.value, true)) {
-                download(newVersion["weburl"]?.value, "ThermoSmartSpring" + newVersion["webversion"]?.value + ".jar")
+                download(newVersion["weburl"]!!.value!!, "ThermoSmartSpring" + newVersion["webversion"]?.value + ".jar")
                 if (startup) {
                     val old = File("ThermoSmartSpring${actualVersion["webversion"]?.value}.jar")
                     if (old.exists() && old.delete()) println("Thermo jar deleted") else println("Error in Thermo jar deletion")
                 }
+                val info = actualVersion["webversion"]
+                info!!.id = "webversion"+info.value
+                infoDAO.save(info)
+            } else {
+                newVersion["webversion"] = Info("webversion", actualVersion["webversion"]!!.value!!, actualVersion["webversion"]!!.time!!)
             }
             if (!newVersion["toolsversion"]?.value.equals(actualVersion["toolsversion"]?.value, true)) {
-                download(newVersion["toolsurl"]?.value, "ThermoTools" + newVersion["toolsversion"]?.value + ".jar")
+                download(newVersion["toolsurl"]!!.value!!, "ThermoTools" + newVersion["toolsversion"]?.value + ".jar")
                 if (startup) {
                     val old = File("ThermoTools${actualVersion["toolsversion"]?.value}.jar")
                     if (old.exists() && old.delete()) println("Tools jar deleted") else println("Error in Tools jar deletion")
                 }
+                val info = actualVersion["toolsversion"]
+                info!!.id = "toolsversion"+info.value
+                infoDAO.save(info)
+            } else {
+                newVersion["toolsversion"] = Info("toolsversion", actualVersion["toolsversion"]!!.value!!, actualVersion["webversion"]!!.time!!)
             }
             newVersion["lastupdate"] = Info("lastupdate", "lastupdate", LocalDateTime.now())
             infoDAO.saveHash(newVersion)
