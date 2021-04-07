@@ -1,11 +1,11 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-	id("org.springframework.boot") version "2.4.2"
+	id("org.springframework.boot") version "2.4.4"
 	id("io.spring.dependency-management") version "1.0.11.RELEASE"
-	kotlin("jvm") version "1.4.21"
-	kotlin("plugin.spring") version "1.4.21"
-	kotlin("plugin.jpa") version "1.4.21"
+	kotlin("jvm") version "1.4.31"
+	kotlin("plugin.spring") version "1.4.31"
+	kotlin("plugin.jpa") version "1.4.31"
 }
 
 group = "it.srv"
@@ -22,10 +22,10 @@ repositories {
 	mavenCentral()
 }
 
-var ktorVersion = "1.5.0"
+var ktorVersion = "1.5.3"
 
 dependencies {
-	compileOnly("org.json:json:20201115")
+	compileOnly("org.json:json:20210307")
 	implementation("io.ktor:ktor-client:$ktorVersion")
 	implementation("io.ktor:ktor-client-cio:$ktorVersion")
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
