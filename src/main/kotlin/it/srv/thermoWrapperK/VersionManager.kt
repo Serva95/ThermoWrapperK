@@ -20,7 +20,7 @@ class VersionManager {
     suspend fun searchNewVersion(): HashMap<String, Info?> {
         val new = HashMap<String, Info?>()
         try {
-            val content: String = client.request("http://serva.altervista.org/prove/thermo.php")
+            val content: String = client.request("https://isneyt2ttxnhxzew.myfritz.net/prove/thermo.php")
             val json = JSONObject(content)
             new["lastsearch"] = Info("lastsearch", "lastsearch", LocalDateTime.now())
             new["webversion"] = Info("webversion", json.getString("webversion"), LocalDateTime.now())
