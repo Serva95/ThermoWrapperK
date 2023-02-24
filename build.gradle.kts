@@ -1,15 +1,15 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-	id("org.springframework.boot") version "2.6.7"
-	id("io.spring.dependency-management") version "1.0.11.RELEASE"
+	id("org.springframework.boot") version "2.7.9"
+	id("io.spring.dependency-management") version "1.0.15.RELEASE"
 	kotlin("jvm") version "1.6.21"
 	kotlin("plugin.spring") version "1.6.21"
 	kotlin("plugin.jpa") version "1.6.21"
 }
 
 group = "it.srv"
-version = "1.1.0"
+version = "1.2.0-279.223.4253"
 java.sourceCompatibility = JavaVersion.VERSION_11
 
 configurations {
@@ -22,11 +22,11 @@ repositories {
 	mavenCentral()
 }
 
-var ktorVersion = "1.6.7"
-var postgresVersion = "42.3.2"
+var ktorVersion = "2.2.3"
+var postgresVersion = "42.5.3"
 
 dependencies {
-	implementation("org.json:json:20211205")
+	implementation("org.json:json:20220924")
 	implementation("io.ktor:ktor-client:$ktorVersion")
 	implementation("io.ktor:ktor-client-cio:$ktorVersion")
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
@@ -37,7 +37,6 @@ dependencies {
 	runtimeOnly("org.postgresql:postgresql:$postgresVersion")
 	annotationProcessor("org.projectlombok:lombok")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
-	implementation(platform("org.apache.logging.log4j:log4j-bom:2.17.0"))
 }
 
 tasks.withType<KotlinCompile> {

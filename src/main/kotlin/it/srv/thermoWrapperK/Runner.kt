@@ -24,7 +24,7 @@ class Runner {
     val infoDAO = InfoDAO()
 
     @Bean
-    fun executer() {
+    fun executor() {
         val info = infoDAO.findLastTemporal()
         val search = runBlocking { versionManager.searchNewVersion() }
         if (info["lastupdate"] == null) {
@@ -40,6 +40,7 @@ class Runner {
         WebRunner().start()
         ToolsRunner().start()
         scheduledRunner()
+        logger.info("loading of the app is complete")
     }
 
     inner class WebRunner : Runnable {
@@ -116,7 +117,7 @@ class Runner {
             LocalTime.of(1, 0).minusSeconds(now.toSecondOfDay().toLong())
         else
             LocalTime.MAX.minusSeconds(now.toSecondOfDay().toLong()).plusSeconds(3600)*/
-        scheduler.scheduleAtFixedRate(VersionManagerRunner(), TimeUnit.HOURS.toHours(3), TimeUnit.HOURS.toHours(3), TimeUnit.HOURS)
+        scheduler.scheduleAtFixedRate(VersionManagerRunner(), TimeUnit.HOURS.toHours(12), TimeUnit.HOURS.toHours(12), TimeUnit.HOURS)
         //scheduler.scheduleAtFixedRate(VersionManagerRunner(), delay.toSecondOfDay().toLong(), TimeUnit.HOURS.toSeconds(3), TimeUnit.SECONDS)
         //scheduler.scheduleAtFixedRate(VersionManagerRunner(), 30, 45, TimeUnit.SECONDS)
     }

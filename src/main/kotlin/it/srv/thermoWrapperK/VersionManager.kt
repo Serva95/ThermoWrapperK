@@ -1,6 +1,7 @@
 package it.srv.thermoWrapperK
 
 import io.ktor.client.*
+import io.ktor.client.call.*
 import io.ktor.client.engine.cio.*
 import io.ktor.client.request.*
 import it.srv.thermoWrapperK.dao.InfoDAO
@@ -20,8 +21,8 @@ class VersionManager {
     suspend fun searchNewVersion(): HashMap<String, Info?> {
         val new = HashMap<String, Info?>()
         try {
-            val content: String = client.request("https://isneyt2ttxnhxzew.myfritz.net/prove/thermo.php")
-            val json = JSONObject(content)
+            val content = client.get("https://isneyt2ttxnhxzew.myfritz.net/prove/thermo.php")
+            val json = JSONObject(content.body() as String)
             new["lastsearch"] = Info("lastsearch", "lastsearch", LocalDateTime.now())
             new["webversion"] = Info("webversion", json.getString("webversion"), LocalDateTime.now())
             new["toolsversion"] = Info("toolsversion", json.getString("toolsversion"), LocalDateTime.now())
