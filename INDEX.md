@@ -5,6 +5,7 @@ Generated from ADR metadata blocks. Treat as derived, not hand-edited
 
 | ADR | Title | Status | Supersedes | Superseded by | Depends on |
 |-----|-------|--------|------------|----------------|------------|
-
-No ADRs yet. The catalogue is empty until the first ADR is authored
-(see `adr/0000-template.md`).
+| [0001](adr/0001-auto-update-and-relaunch-bundled-jars.md) | Automatic update and relaunch of bundled ThermoSmartSpring and ThermoTools jars | Implemented | — | — | 0002, 0003, 0004 |
+| [0002](adr/0002-spring-boot-kotlin-platform.md) | Spring Boot + Kotlin as the application platform | Implemented | — | — | — |
+| [0003](adr/0003-persist-version-state-in-postgres-jpa.md) | Persist update and version state in Postgres via Spring Data JPA | Implemented | — | — | 0002 |
+| [0004](adr/0004-ktor-jackson-remote-version-check-client.md) | Ktor client with Jackson deserialization for the remote version-check endpoint | Implemented | — | — | — |
