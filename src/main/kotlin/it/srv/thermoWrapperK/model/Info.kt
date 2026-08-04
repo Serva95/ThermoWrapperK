@@ -1,7 +1,7 @@
 package it.srv.thermoWrapperK.model
 
 import java.time.LocalDateTime
-import javax.persistence.*
+import jakarta.persistence.*
 
 @Entity
 @Table(name = "info")

@@ -6,6 +6,7 @@ import it.srv.thermoWrapperK.model.Info
 import kotlinx.coroutines.runBlocking
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.ApplicationRunner
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import java.io.File
@@ -24,7 +25,7 @@ class Runner {
     val infoDAO = InfoDAO()
 
     @Bean
-    fun executor() {
+    fun executor() = ApplicationRunner {
         val info = infoDAO.findLastTemporal()
         val search = runBlocking { versionManager.searchNewVersion() }
         if (info["lastupdate"] == null) {
