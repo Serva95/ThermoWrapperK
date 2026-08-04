@@ -40,7 +40,7 @@ class Runner {
         WebRunner().start()
         ToolsRunner().start()
         scheduledRunner()
-        logger.info("loading of the app is complete")
+        logger.info("Loading of the app is complete")
     }
 
     inner class WebRunner : Runnable {
@@ -91,7 +91,7 @@ class Runner {
                         Thread.sleep(1500)
                     } catch (ignored: InterruptedException) { }
                     val old = File("ThermoSmartSpring${actualVersion["webversion"]?.value}.jar")
-                    if (old.exists() && old.delete()) println("Thermo jar deleted") else println("Error in Thermo jar deletion")
+                    if (old.exists() && old.delete()) logger.info("Thermo jar deleted") else logger.error("Error in Thermo jar deletion")
                     val wr = WebRunner()
                     wr.start()
                 }
@@ -101,7 +101,7 @@ class Runner {
                         Thread.sleep(1500)
                     } catch (ignored: InterruptedException) { }
                     val old = File("ThermoTools${actualVersion["toolsversion"]?.value}.jar")
-                    if (old.exists() && old.delete()) println("Tools jar deleted") else println("Error in Tools jar deletion")
+                    if (old.exists() && old.delete()) logger.info("Tools jar deleted") else logger.error("Error in Tools jar deletion")
                     val tr = ToolsRunner()
                     tr.start()
                 }

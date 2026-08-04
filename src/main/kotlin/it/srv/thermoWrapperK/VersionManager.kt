@@ -1,98 +1,76 @@
 package it.srv.thermoWrapperK
 
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.module.kotlin.readValue
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.engine.cio.*
 import io.ktor.client.request.*
+import io.ktor.client.statement.*
 import it.srv.thermoWrapperK.dao.InfoDAO
 import it.srv.thermoWrapperK.model.Info
-import org.json.JSONException
-import org.json.JSONObject
+import it.srv.thermoWrapperK.model.RemoteVersionResponse
+import org.slf4j.LoggerFactory
 import java.io.File
 import java.io.FileOutputStream
-import java.io.IOException
-import java.net.URL
-import java.nio.channels.Channels
 import java.time.LocalDateTime
+import java.net.URL
 
-class VersionManager {
-    private val client = HttpClient(CIO)
+class VersionManager(private val client: HttpClient = HttpClient(CIO)) {
+    private val log = LoggerFactory.getLogger(VersionManager::class.java)
+    private val searchUrl = "https://serva.click/prove/thermo.php"
+    private val objectMapper = ObjectMapper().findAndRegisterModules()
 
     suspend fun searchNewVersion(): HashMap<String, Info?> {
-        val new = HashMap<String, Info?>()
+        val result = HashMap<String, Info?>()
         try {
-            val content = client.get("https://isneyt2ttxnhxzew.myfritz.net/prove/thermo.php")
-            val json = JSONObject(content.body() as String)
-            new["lastsearch"] = Info("lastsearch", "lastsearch", LocalDateTime.now())
-            new["webversion"] = Info("webversion", json.getString("webversion"), LocalDateTime.now())
-            new["toolsversion"] = Info("toolsversion", json.getString("toolsversion"), LocalDateTime.now())
-            new["weburl"] = Info("weburl", json.getString("weburl"), null)
-            new["toolsurl"] = Info("toolsurl", json.getString("toolsurl"), null)
-            if (!json.optString("webextra").equals("", true)){
-                new["webextra"] = Info("webextra", json.getString("webextra"), null)
-            }
-            if (!json.optString("toolsextra").equals("", true)){
-                new["toolsextra"] = Info("toolsextra", json.getString("toolsextra"), null)
-            }
-        } catch (e: IOException) {
-            e.printStackTrace()
-        } catch (e: InterruptedException) {
-            e.printStackTrace()
-        } catch (e: JSONException) {
-            e.printStackTrace()
+            val response: HttpResponse = client.get(searchUrl)
+            val responseBody = response.body<String>()
+            val remoteData = objectMapper.readValue<RemoteVersionResponse>(responseBody)
+            
+            result["webversion"] = Info("webversion", remoteData.webversion, LocalDateTime.now())
+            result["weburl"] = Info("weburl", remoteData.weburl, LocalDateTime.now())
+            result["toolsversion"] = Info("toolsversion", remoteData.toolsversion, LocalDateTime.now())
+            result["toolsurl"] = Info("toolsurl", remoteData.toolsurl, LocalDateTime.now())
+        } catch (e: Exception) {
+            log.error("Error searching for new version: ${e.message}", e)
         }
-        return new
+        return result
     }
 
     fun download(url: String, fileName: String) {
         try {
-            val website = URL(url)
-            val rbc = Channels.newChannel(website.openStream())
-            val fos = FileOutputStream(fileName)
-            //134MB max download
-            fos.channel.transferFrom(rbc, 0, (1 shl 27).toLong())
-            fos.close()
+            log.info("Downloading $url to $fileName")
+            URL(url).openStream().use { input ->
+                FileOutputStream(File(fileName)).use { output ->
+                    input.copyTo(output)
+                }
+            }
+            log.info("Download complete: $fileName")
         } catch (e: Exception) {
-            e.printStackTrace()
-            throw RuntimeException(e.printStackTrace().toString())
+            log.error("Failed to download $url: ${e.message}")
+            throw e
         }
     }
 
-    fun checkVersions(newVersion: HashMap<String, Info?>, actualVersion: HashMap<String, Info?>, infoDAO: InfoDAO, startup: Boolean): Boolean {
-        var newVersionInstalled = false
-        if (!newVersion["webversion"]?.value.equals(actualVersion["webversion"]?.value, true)
-                || !newVersion["toolsversion"]?.value.equals(actualVersion["toolsversion"]?.value, true)) {
-            if (!newVersion["webversion"]?.value.equals(actualVersion["webversion"]?.value, true)) {
-                download(newVersion["weburl"]!!.value!!, "ThermoSmartSpring" + newVersion["webversion"]?.value + ".jar")
-                if (startup) {
-                    val old = File("ThermoSmartSpring${actualVersion["webversion"]?.value}.jar")
-                    if (old.exists() && old.delete()) println("Thermo jar deleted") else println("Error in Thermo jar deletion")
-                }
-                val info = actualVersion["webversion"]
-                info!!.id = "webversion"+info.value
-                infoDAO.save(info)
-            } else {
-                newVersion["webversion"] = Info("webversion", actualVersion["webversion"]!!.value!!, actualVersion["webversion"]!!.time!!)
+    fun checkVersions(new: HashMap<String, Info?>, current: HashMap<String, Info?>, dao: InfoDAO, update: Boolean): Boolean {
+        var changed = false
+        val keysToCheck = listOf("webversion" to ("weburl" to "ThermoSmartSpring"), "toolsversion" to ("toolsurl" to "ThermoTools"))
+
+        for ((verKey, urlAndPrefix) in keysToCheck) {
+            val (urlKey, prefix) = urlAndPrefix
+            val newVer = new[verKey]?.value
+            val curVer = current[verKey]?.value
+            if (newVer != null && newVer != curVer) {
+                log.info("Version change detected for $verKey: $curVer -> $newVer")
+                changed = true
+                download(new[urlKey]!!.value!!, "$prefix$newVer.jar")
             }
-            if (!newVersion["toolsversion"]?.value.equals(actualVersion["toolsversion"]?.value, true)) {
-                download(newVersion["toolsurl"]!!.value!!, "ThermoTools" + newVersion["toolsversion"]?.value + ".jar")
-                if (startup) {
-                    val old = File("ThermoTools${actualVersion["toolsversion"]?.value}.jar")
-                    if (old.exists() && old.delete()) println("Tools jar deleted") else println("Error in Tools jar deletion")
-                }
-                val info = actualVersion["toolsversion"]
-                info!!.id = "toolsversion"+info.value
-                infoDAO.save(info)
-            } else {
-                newVersion["toolsversion"] = Info("toolsversion", actualVersion["toolsversion"]!!.value!!, actualVersion["webversion"]!!.time!!)
-            }
-            newVersion["lastupdate"] = Info("lastupdate", "lastupdate", LocalDateTime.now())
-            infoDAO.saveHash(newVersion)
-            newVersionInstalled = true
-        } else {
-            actualVersion["lastsearch"] = Info("lastsearch", "lastsearch", LocalDateTime.now())
-            infoDAO.saveHash(actualVersion)
         }
-        return newVersionInstalled
+
+        if (changed) {
+            dao.saveHash(new)
+        }
+        return changed
     }
 }
