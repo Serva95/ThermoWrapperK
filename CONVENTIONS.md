@@ -8,6 +8,22 @@ Language: en-US throughout. All ADRs, plan items, and `_agent/` files
 are written in English, regardless of the language used in
 conversation with an agent.
 
+## Project-Specific Practices
+
+- **Version string encodes key dependency versions.** The `version`
+  field in `build.gradle.kts` follows
+  `<semver>-<springBootVersion>_<ktorVersion>_<postgresVersion>` (e.g.
+  `1.3.0-3.5.16_2.3.12_42.7.4`). Bump the semver segment for any
+  release and update the three trailing version tokens whenever the
+  corresponding dependency changes, so the artifact version alone
+  identifies its Spring Boot/Ktor/Postgres-driver combination.
+- **`src/main/resources/application.properties` is intentionally
+  untracked.** It holds local datasource credentials in plain text
+  and was deliberately removed from git tracking (commit `790a781`),
+  even though it is not listed in `.gitignore`. Never `git add` this
+  file, nor the `src/main/resources/` directory as a whole, when it
+  appears untracked in `git status`.
+
 ## ADR Files
 
 ADR filenames use `NNNN-kebab-case-slug.md`, zero-padded to 4 digits,

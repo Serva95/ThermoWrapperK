@@ -25,6 +25,20 @@ prior, informal commit history.
 - `_agent/` — single-agent coordination: `ROLES.md`, `WORKLOG.md`,
   `CURRENT_FOCUS.md`, `HANDOFF.md`, `prompts/autonomous.md`.
 
+## Project-specific hard rules
+
+- **Never stage or commit `src/main/resources/application.properties`
+  or the `src/main/resources/` directory.** It holds local datasource
+  credentials in plain text and was deliberately untracked (commit
+  `790a781`) despite not being in `.gitignore`. If it shows up
+  untracked in `git status`, leave it alone — stage files by explicit
+  name, never `git add -A` / `git add .`.
+- **Keep the `version` string in `build.gradle.kts` in sync with its
+  dependencies.** Format:
+  `<semver>-<springBootVersion>_<ktorVersion>_<postgresVersion>`. When
+  bumping Spring Boot, Ktor, or the Postgres driver, update the
+  matching token in `version` in the same commit.
+
 ## Hard rules when editing ADRs
 
 These come from `CONVENTIONS.md` and override default behaviour:
