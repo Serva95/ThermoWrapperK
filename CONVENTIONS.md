@@ -39,7 +39,7 @@ Status lifecycle: `Proposed → Accepted → Implemented → (Superseded | Depre
 |---|---|
 | Proposed | Draft. Decision authored but not yet approved. |
 | Accepted | Decision approved; implementation authorised. Work item lives in `plan/todo/`. |
-| Implemented | Code shipped (fast-forwarded to `main` + pushed). Work item moved to `plan/done/`. ADR is the authoritative spec the running system matches. |
+| Implemented | Code shipped (fast-forwarded to `opencode` + pushed). Work item moved to `plan/done/`. ADR is the authoritative spec the running system matches. |
 | Superseded | Replaced by another ADR. The successor is named in `superseded-by:` metadata. |
 | Deprecated | Was real; the world moved on; no successor. Capability is not being rebuilt. |
 
@@ -88,7 +88,7 @@ Pending and shipped work live in `plan/` at the repository root:
 - `plan/done/<YYYY-MM-DD>-<slug>.md` — shipped work, chronological. A
   `git mv` from `todo/` to `done/` is the completion event.
 
-The completion event is: fast-forwarded to `main` + remote push
+The completion event is: fast-forwarded to `opencode` + remote push
 succeeded (see §Git Contract).
 
 When a `plan/todo/` item ships, the file moves to `plan/done/` AND the
@@ -116,10 +116,10 @@ Commit messages follow Conventional Commits with a mandatory
 - Co-Authored-By trailer on agent commits: no, unless the user
   explicitly asks for one on a given commit.
 
-**Integration model:** direct-to-main, fast-forward only. Changes are
-fast-forwarded onto `main`; no merge commits. The verify gate
-(`./gradlew build`) runs locally and must pass before push. A change
-is "shipped" when it is on `main` and pushed. Direct pushes to `main`
-still require the user's explicit go-ahead per this repo's normal
-push-authorization rules — this convention describes the *shape* of
-integration, not a standing authorization to push unattended.
+**Integration model:** direct-to-`opencode`, fast-forward only. Changes
+are fast-forwarded onto `opencode`; no merge commits. The verify gate
+(`./gradlew build`) runs locally and must pass before push. A change is
+"shipped" when it is on `opencode` and pushed. Direct pushes to
+`opencode` still require the user's explicit go-ahead per this repo's
+normal push-authorization rules — this convention describes the *shape*
+of integration, not a standing authorization to push unattended.

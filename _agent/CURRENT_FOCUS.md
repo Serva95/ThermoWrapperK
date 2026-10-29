@@ -10,7 +10,7 @@ file.
 
 ## Active state
 
-- **Branch:** master
+- **Branch:** opencode
 - **Active item:** none — no work in flight.
 - **Blockers:** none.
 - **Uncommitted work:** none.

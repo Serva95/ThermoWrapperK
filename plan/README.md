@@ -23,7 +23,7 @@ tracks the human ordering of work, not the ADR catalogue ordering.
   tweak, a dependency bump) skips the ceremony. Use judgement.
 - The status of the owning ADR(s) advances when the work ships:
   `Accepted` → `Implemented`.
-- Completion event: fast-forwarded to `main` + remote push succeeded.
+- Completion event: fast-forwarded to `opencode` + remote push succeeded.
 
 ## Status semantics on the owning ADRs
 

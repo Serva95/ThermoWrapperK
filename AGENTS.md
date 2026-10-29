@@ -100,7 +100,7 @@ state and history; LOCKS discipline is not in use.
 
 - A pending item gets a `plan/todo/NNNN-<slug>.md` file BEFORE work
   starts, naming the owning ADR(s), scope, and exit criteria.
-- The completion event is: fast-forwarded to `main` + remote push
+- The completion event is: fast-forwarded to `opencode` + remote push
   succeeded. On completion, `git mv` the file to
   `plan/done/<YYYY-MM-DD>-<slug>.md` with a footer naming the HEAD SHA.
 - The owning ADR(s) advance `Accepted → Implemented` on the same
@@ -114,11 +114,11 @@ state and history; LOCKS discipline is not in use.
 - ADR-revision tags `adr-NNNN-rN`: no.
 - Co-Authored-By trailer: no, unless the user explicitly asks for one.
 - Cross-references between ADRs use relative paths (`adr/NNNN-*.md`).
-- **Integration:** direct-to-main, **fast-forward only**. No merge
-  commits on `main`. The verify gate (`./gradlew build`) runs locally
+- **Integration:** direct-to-`opencode`, **fast-forward only**. No merge
+  commits on `opencode`. The verify gate (`./gradlew build`) runs locally
   and must pass before push. Completion event: fast-forwarded to
-  `main` + remote push succeeded. Pushing to `main` still requires the
-  user's explicit go-ahead each time, per this repo's standing
+  `opencode` + remote push succeeded. Pushing to `opencode` still requires
+  the user's explicit go-ahead each time, per this repo's standing
   push-authorization practice — this convention fixes the *shape* of
   integration (no PRs, ff-only), not a blanket authorization to push
   without asking.

@@ -50,18 +50,18 @@ footer required on any commit touching an ADR.
 
 ## Step 6 — Integrate
 
-- Fast-forward the work onto `main`: `git merge --ff-only
-  <work-branch>` (or commit directly on `master` if that is the
+- Fast-forward the work onto `opencode`: `git merge --ff-only
+  <work-branch>` (or commit directly on `opencode` if that is the
   current flow).
-- **Ask the user before `git push`.** Pushing to `master` requires
+- **Ask the user before `git push`.** Pushing to `opencode` requires
   explicit per-push authorization in this repo (see `AGENTS.md` §Git
   contract) — do not push unattended even though the integration
-  model is direct-to-main.
+  model is direct-to-`opencode`.
 - The verify gate has already passed locally (Step 4); no CI wait.
 
 ## Step 7 — Ship the queue item
 
-Once the change is on `master` (fast-forwarded and pushed):
+Once the change is on `opencode` (fast-forwarded and pushed):
 
 - `git mv plan/todo/NNNN-<slug>.md plan/done/<YYYY-MM-DD>-<slug>.md`.
 - Amend the moved file with a "Shipped at HEAD `<sha>`" footer.
