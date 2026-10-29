@@ -5,6 +5,21 @@ companion applications — **ThermoSmartSpring** (web app) and
 **ThermoTools** — up to date and running, without anyone having to log
 into the host and redeploy them by hand.
 
+## System context
+
+ThermoWrapperK is one of three components of the thermo heating system:
+its companions are **ThermoSmartSpring** (the control web app) and
+**ThermoTools** (the headless decision backend). All three run on the
+same host, share the same `thermo` database, and keep their own git
+remotes (`github.com/Serva95/<name>`). For a single working tree use
+the **Thermo-monorepo** umbrella
+(`https://github.com/Serva95/Thermo-monorepo.git`, branch `master`):
+`git clone` + `git submodule update --init` yields all three components
+at their pinned commits. Cross-component decisions live in the system
+ADR catalogue — the conventions home — in `ThermoSmartSpring/adr/`
+(beside its `CONVENTIONS.md` and `plan/`); this repository's own
+`adr/` records wrapper-local decisions and remains component-level.
+
 ## What it does
 
 - Every **12 hours**, polls a remote endpoint for the latest published
