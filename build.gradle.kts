@@ -19,9 +19,21 @@ repositories {
 
 var ktorVersion = "3.6.0"
 var postgresVersion = "42.7.4"
+var coroutinesVersion = "1.11.0"
+
+dependencyManagement {
+	dependencies {
+		dependency("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion")
+		dependency("org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:$coroutinesVersion")
+		dependency("org.jetbrains.kotlinx:kotlinx-coroutines-slf4j:$coroutinesVersion")
+		dependency("org.jetbrains.kotlinx:kotlinx-coroutines-slf4j-jvm:$coroutinesVersion")
+	}
+}
 
 dependencies {
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
+	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-slf4j")
 	implementation("io.ktor:ktor-client:$ktorVersion")
 	implementation("io.ktor:ktor-client-cio:$ktorVersion")
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
