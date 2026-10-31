@@ -54,17 +54,21 @@ persistence of version state all behave exactly as specified by
 ## Acceptance criteria
 
 1. `build.gradle.kts` declares `org.springframework.boot` version
-   `4.1.2` and the `io.spring.dependency-management` plugin is at a
-   version compatible with Spring Boot 4 (or removed if the 3.5-era
-   plugin is no longer needed).
+   `4.1.2`; the `io.spring.dependency-management` plugin is **kept**
+   (owner decision of 2026-10-31) and adjusted to the version it needs
+   to work with Spring Boot 4.
 2. The `version` string in `build.gradle.kts` is updated in the same
-   commit to keep its `<springBootVersion>` token in sync
-   (e.g. `1.3.0-4.1.2_2.3.12_42.7.4`, or with new Ktor/Postgres tokens
-   if those are bumped to achieve criterion 1/4).
-3. The Ktor client and Jackson deserialization path (ADR 0004) works
-   unmodified, or with the minimum version bump required for
-   Spring Boot 4 compatibility — `VersionManagerTest` passes with the
-   mocked client and no real network call.
+   commit to keep its `<springBootVersion>` and `<ktorVersion>` tokens
+   in sync (e.g. `1.3.0-4.1.2_3.6.0_42.7.4`; the Postgres token moves
+   only if criterion 4 forces a driver bump).
+3. The Ktor client and Jackson deserialization path (ADR 0004) are
+   **bumped to Ktor 3.6.0** (the latest 3.x release, and the owner's
+   target of 2026-10-31) — a 2.x → 3.x major jump. The affected
+   surface (`VersionManager`, `VersionManagerTest`) uses only stable
+   client API: `HttpClient(CIO)`, `get`, `response.body<String>()`,
+   the mock client engine, and `HttpStatusCode` — checked for source
+   compatibility with 3.x (Ktor 3 migration notes). `VersionManagerTest`
+   passes with the mocked client and no real network call.
 4. All `javax.*` imports that Spring Boot 4 no longer carries are
    migrated to `jakarta.*`; the JPA `Info` entity and repository layer
    (ADR 0003) load and persist against the same Postgres schema with
@@ -91,10 +95,13 @@ persistence of version state all behave exactly as specified by
 
 ## Open questions
 
-- Whether Ktor 2.3.12 is usable as-is on Spring Boot 4.1.2 or needs a
-  minor bump — decide at implementation time against the new BOM.
-- Whether the `io.spring.dependency-management` 1.1.x plugin remains
-  required on Spring Boot 4 or can be dropped.
+None outstanding. Both questions raised in the initial draft were
+resolved by the owner on 2026-10-31:
+
+- **Ktor:** bump to **3.6.0** (latest 3.x release) and check the
+  client code against it — reflected in AC-2 and AC-3.
+- **`io.spring.dependency-management` plugin:** **keep** it —
+  reflected in AC-1.
 
 ## References / cross-links
 
@@ -112,6 +119,7 @@ persistence of version state all behave exactly as specified by
 | Date | Revision | Author | Change |
 |------|----------|--------|--------|
 | 2026-10-30 | r1 | agent | Initial draft. |
+| 2026-10-31 | r2 | agent | Owner resolved both open questions (2026-10-31): Ktor target fixed at 3.6.0 with a client-code compatibility check (AC-2, AC-3); `io.spring.dependency-management` plugin kept (AC-1). Open-questions section converted to the resolved record. |
 
 ## Approvals
 
