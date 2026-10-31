@@ -46,6 +46,7 @@ separate repository) is deliberately sequenced **after** this one.
 | 4 | `javax.*` → `jakarta.*` migration complete where required; `Info` entity + repository intact. | AC-4 |
 | 5 | `./gradlew build` passes (with local Postgres available for `contextLoads()`). | AC-5 |
 | 6 | No behavioural change to scheduling, download, launch/relaunch, or error logging. | AC-6 |
+| 7 | `README.md` tech-stack table updated in this repository to the shipped stack (Spring Boot 3.5 → 4.1; Ktor 3.6 recorded alongside the CIO engine), mirroring the ThermoTools `todo/0002` documentation follow-through. | N/A — documentation hygiene; READMEs may reference internal ADRs (conventions exception) |
 
 ## Completion event (per CONVENTIONS.md)
 
