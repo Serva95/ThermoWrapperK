@@ -107,9 +107,9 @@ tests (`VersionManagerTest`) are self-contained and use Ktor's
 
 | Layer | Choice |
 |---|---|
-| Language / platform | Kotlin 2.4, Spring Boot 3.5, JVM 17 |
+| Language / platform | Kotlin 2.4, Spring Boot 4.1, JVM 17 |
 | Persistence | Spring Data JPA + Postgres |
-| HTTP client | Ktor (CIO engine) |
+| HTTP client | Ktor 3.6 (CIO engine) |
 | JSON | Jackson (`jackson-module-kotlin`) |
 | Tests | JUnit 5 |
 
