@@ -1,7 +1,7 @@
 ---
 adr: 0005
 title: Migrate ThermoWrapperK to Spring Boot 4.1.2
-status: Proposed
+status: Implemented
 date: 2026-10-30
 owner: agent
 supersedes:
@@ -120,8 +120,10 @@ resolved by the owner on 2026-10-31:
 |------|----------|--------|--------|
 | 2026-10-30 | r1 | agent | Initial draft. |
 | 2026-10-31 | r2 | agent | Owner resolved both open questions (2026-10-31): Ktor target fixed at 3.6.0 with a client-code compatibility check (AC-2, AC-3); `io.spring.dependency-management` plugin kept (AC-1). Open-questions section converted to the resolved record. |
+| 2026-11-01 | r3 | agent | Implemented: build moved to Spring Boot 4.1.2 — Kotlin plugin 2.4.10, dependency-management 1.1.6, Ktor 3.6.0 (CIO engine) with root and `-jvm` coroutines pinned at 1.11.0. `version` bumped to `1.3.0-4.1.2_3.6.0_42.7.4`. Full gate green against a live dev Postgres: 4/4 tests (VersionManagerTest 3/3, `contextLoads()` 1/1) and `./gradlew build` SUCCESSFUL. |
 
 ## Approvals
 
 | Role | Name | Date | Signature |
 |------|------|------|-----------|
+| Agent | agent | 2026-11-01 | [Verified] |

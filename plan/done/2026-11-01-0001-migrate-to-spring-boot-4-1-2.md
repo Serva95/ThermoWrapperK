@@ -80,3 +80,9 @@ separate repository) is deliberately sequenced **after** this one.
 
 Per the repo's standing practice, a push to `origin` requires an
 explicit go-ahead from the owner for each push.
+
+---
+
+Shipped at HEAD `a868511` (Spring Boot 4.1.2, Ktor 3.6.0, Gradle 8.14
+toolchain; 4/4 tests green including `contextLoads()` against a live
+dev Postgres; `./gradlew build` SUCCESSFUL).
